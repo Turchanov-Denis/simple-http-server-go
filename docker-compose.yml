@@ -1,0 +1,26 @@
+﻿services:
+  mongo:
+    image: mongo:6
+    container_name: my-mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    volumes:
+      - mongo_data:/data/db
+
+  go-server:
+    build: .
+    container_name: my-go-server
+    depends_on:
+      - mongo
+    ports:
+      - "8080:8080"
+    environment:
+      SERVERPORT: 8080
+    restart: always
+
+volumes:
+  mongo_data:
